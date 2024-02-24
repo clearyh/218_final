@@ -1,7 +1,9 @@
 //=====[#include guards - begin]===============================================
 
-#ifndef _GATE_H_
-#define _GATE_H_
+#ifndef _TFT_H_
+#define _TFT_H_
+
+#include <stdint.h>
 
 //=====[Declaration of public defines]=========================================
 
@@ -11,4 +13,4 @@
 
 //=====[#include guards - end]=================================================
 
-#endif // _GATE_H_
+#endif // _TFT_H_
