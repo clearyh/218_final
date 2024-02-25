@@ -2,6 +2,7 @@
 
 #include "mbed.h"
 #include "arm_book_lib.h"
+#include "tft.h"
 #include "ui.h"
 
 //=====[Declaration of private defines]========================================
@@ -37,6 +38,7 @@ bool readEnter() {
 bool readBack() {
     return back.read();
 }
+
 
 
 

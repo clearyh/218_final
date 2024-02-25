@@ -4,6 +4,7 @@
 #include "arm_book_lib.h"
 #include "font.h"
 #include "tft.h"
+#include "ui.h"
 
 //=====[Declaration of private defines]========================================
 

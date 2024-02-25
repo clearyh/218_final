@@ -8,7 +8,7 @@
 int main()
 {
     tftInit();
-    
+    scan();
     while (true) {
         
     }

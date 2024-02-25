@@ -9,17 +9,7 @@
 
 //=====[Declaration of public data types]======================================
 
-class Item {
-    uint16_t x, y;
-    char *text;
-    int text_length;
-    void (*function)();
-    public:
-    Item(uint16_t x0, uint16_t y0, char *t, int t_l, void (*func)());
-    void draw();
-    void select();
-    void deselect();
-};
+
 
 //=====[Declarations (prototypes) of public functions]=========================
 

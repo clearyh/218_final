@@ -11,9 +11,6 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
-void systemInit();
-void systemRun();
-
 //=====[#include guards - end]=================================================
 
 #endif // _SYSTEM_H_

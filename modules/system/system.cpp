@@ -2,6 +2,7 @@
 
 #include "mbed.h"
 #include "arm_book_lib.h"
+#include "tft.h"
 
 //=====[Declaration of private defines]========================================
 
@@ -18,7 +19,5 @@
 //=====[Declarations (prototypes) of private functions]========================
 
 //=====[Implementations of public functions]===================================
-
-
 
 //=====[Implementations of private functions]==================================

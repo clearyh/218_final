@@ -5,11 +5,17 @@
 
 #include <stdint.h>
 
+
 //=====[Declaration of public defines]=========================================
 
 //=====[Declaration of public data types]======================================
 
 //=====[Declarations (prototypes) of public functions]=========================
+
+float getDistance(int t, int z);
+
+void scan();
+
 
 //=====[#include guards - end]=================================================
  
