@@ -22,8 +22,6 @@
 #define RAM_WR 0x2C
 #define COL_MOD 0x3A
 
-#define TXT_BGND 0x00
-
 
 //=====[Declaration of private data types]=====================================
 
@@ -52,6 +50,7 @@ static uint16_t tftDrawChar(uint16_t x0, uint16_t y0, char l, uint16_t c);
 //=====[Implementations of public functions]===================================
 
 void tftInit() {
+    tft_spi.frequency(2000000);
     tftReset();
     tftCommand(SW_RST);
     delay(200);
@@ -69,10 +68,7 @@ void tftInit() {
     tftCommand(DISP_ON);
     delay(10);
     tftCommand(RAM_WR);
-    for(int i = 0; i < 320 * 240; i++) {
-        tftData(0x00);
-        tftData(0x00);
-    }
+    tftShadeRect(0, 0, 240, 320, 0x0000);
 }
 
 void tftSetRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye) {
@@ -109,6 +105,17 @@ void tftDrawString(uint16_t x, uint16_t y, uint16_t c, char *str, int len) {
     for (int i = 0; i < len; i++) {
         x += 2 * tftDrawChar(x, y, str[i], c);
     }
+}
+
+void tftDrawCenteredString(uint16_t x, uint16_t y, uint16_t c, char *str, int len) {
+    uint16_t d = 0;
+    for(int i = 0; i < len; i++) {
+        int mx = ((uint8_t) str[i]) - 32;
+	    const uint16_t *chp = font[mx];
+         d += chp[15];
+    }
+    tftDrawString(x - d, y, c, str, len);
+
 }
 
 //=====[Implementations of private functions]==================================
