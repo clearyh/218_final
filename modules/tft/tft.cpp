@@ -11,6 +11,11 @@
 #define TFT_RES_H 240
 #define TFT_RES_V 320
 
+#define SPI1_MOSI PA_7
+#define SPI1_MISO PA_6
+#define SPI1_SCK  PA_5
+#define SPI1_CS   PD_14
+
 #define NO_OP 0x00
 #define SW_RST 0x01
 #define SLP_OUT 0x11
@@ -31,9 +36,9 @@
 
 //=====[Declaration and initialization of public global objects]===============
 
-SPI tft_spi(PA_7, PA_6, PA_5, PA_4);
-DigitalOut tft_rst(PA_12);
-DigitalOut tft_dc(PB_0);
+SPI tft_spi(SPI1_MOSI, SPI1_MISO, SPI1_SCK, SPI1_CS);
+DigitalOut tft_rst(D8);
+DigitalOut tft_dc(D9);
 
 //=====[Declaration of external public global variables]=======================
 
@@ -51,7 +56,6 @@ static uint16_t tftDrawChar(uint16_t x0, uint16_t y0, char l, uint16_t c);
 //=====[Implementations of public functions]===================================
 
 void tftInit() {
-    tft_spi.frequency(2000000);
     tftReset();
     tftCommand(SW_RST);
     delay(200);
@@ -59,17 +63,16 @@ void tftInit() {
     delay(20);
     tftCommand(COL_MOD);
     tftData(0x05);
-    delay(10);
+    delay(20);
     tftSetRect(0, 0, 240, 320);
-    delay(10);
+    delay(20);
     tftCommand(NORM_ON);
-    delay(10);
+    delay(20);
     tftCommand(INV_ON);
-    delay(10);
+    delay(20);
     tftCommand(DISP_ON);
-    delay(10);
-    tftCommand(RAM_WR);
-    tftShadeRect(0, 0, 240, 320, 0x0000);
+    delay(20);
+    tftShadeRect(0, 0, 240, 320, 0xFFFF);
 }
 
 void tftSetRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye) {

@@ -12,15 +12,15 @@
 
 #define TOTAL_STEP_THETA 36000
 #define TOTAL_STEP_Z 20000
-#define MAX_THETA_RESOLUTION 360
-#define MAX_Z_RESOLUTION 200
+#define MAX_THETA_RESOLUTION 120
+#define MAX_Z_RESOLUTION 100
 
 //=====[Declaration of private data types]=====================================
 
 int theta_step = 0;
 int z_step = 0;
 
-int theta_resolution = 360;
+int theta_resolution = 120;
 int z_resolution = 100;
 
 int theta_inc = TOTAL_STEP_THETA / theta_resolution;
@@ -50,11 +50,11 @@ void scan() {
     tftDrawString(30, 100, TXT_NSEL, "! step:", 7);
     tftDrawString(30, 140, TXT_NSEL, "Z step:", 7);
     for(z_step = 0; z_step < z_resolution; z_step++) {
-        char str2[4];
+        char str2[5];
         sprintf(str2, "%.4i", z_step);
         tftDrawString(140, 140, TXT_SEL, str2, 4);
         for(int theta_step = 0; theta_step < theta_resolution; theta_step++) {
-            char str1[4];
+            char str1[5];
             sprintf(str1, "%.4i", theta_step);
             tftDrawString(140, 100, TXT_SEL, str1, 4);
             float d = readSensor();

@@ -10,10 +10,10 @@
 
 //=====[Declaration and initialization of public global objects]===============
 
-DigitalOut ThetaDir(PB_1);
-DigitalOut ZDir(PB_1);
-DigitalOut ThetaStep(PB_1);
-DigitalOut ZStep(PB_1);
+DigitalOut ThetaDir(D0);
+DigitalOut ZDir(D1);
+DigitalOut ThetaStep(D2);
+DigitalOut ZStep(D3);
 
 //=====[Declaration of external public global variables]=======================
 

@@ -8,7 +8,8 @@
 int main()
 {
     tftInit();
-    scan();
+    tftShadeRect(0, 0, 240, 320, 0xFFFF);
+    //scan();
     while (true) {
         
     }

@@ -11,9 +11,9 @@
 
 //=====[Declaration and initialization of public global objects]===============
 
-AnalogIn dial(PA_0);
-DigitalIn enter(PA_8);
-DigitalIn back(PF_1);
+AnalogIn dial(A0);
+DigitalIn enter(D4);
+DigitalIn back(D5);
 
 //=====[Declaration of external public global variables]=======================
 

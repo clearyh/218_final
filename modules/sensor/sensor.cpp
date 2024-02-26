@@ -15,7 +15,7 @@
 
 //=====[Declaration and initialization of public global objects]===============
 
-AnalogIn sensor(PA_1);
+AnalogIn sensor(A5);
 
 //=====[Declaration of external public global variables]=======================
 
