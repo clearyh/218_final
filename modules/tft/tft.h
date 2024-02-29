@@ -8,9 +8,11 @@
 //=====[Declaration of public defines]=========================================
 
 #define TXT_BGND 0x00
-#define TXT_NSEL 0x8410
+#define TXT_NSEL 0xB596
 #define TXT_SEL 0xFFFF
 #define TXT_HEAD 0xFEE6
+#define TXT_ENTR 0x5E4B
+#define TXT_BACK 0x5AD8
 
 //=====[Declaration of public data types]======================================
 

@@ -36,7 +36,8 @@
 
 //=====[Declaration and initialization of public global objects]===============
 
-SPI tft_spi(SPI1_MOSI, SPI1_MISO, SPI1_SCK, SPI1_CS);
+SPI tft_spi(SPI1_MOSI, SPI1_MISO, SPI1_SCK);
+DigitalOut tft_cs(SPI1_CS);
 DigitalOut tft_rst(D8);
 DigitalOut tft_dc(D9);
 
@@ -72,7 +73,7 @@ void tftInit() {
     delay(20);
     tftCommand(DISP_ON);
     delay(20);
-    tftShadeRect(0, 0, 240, 320, 0xFFFF);
+    tftShadeRect(0, 0, 240, 320, 0x0000);
 }
 
 void tftSetRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye) {
@@ -132,13 +133,17 @@ static void tftReset() {
 }
 
 static void tftCommand(uint8_t cmd) {
+    tft_cs.write(false);
     tft_dc.write(false);
     tft_spi.write(cmd);
+    tft_cs.write(true);
 }
 
 static void tftData(uint8_t arg) {
+    tft_cs.write(false);
     tft_dc.write(true);
     tft_spi.write(arg);
+    tft_cs.write(true);
 }
 
 static uint16_t tftDrawChar(uint16_t x0, uint16_t y0, char l, uint16_t c) {

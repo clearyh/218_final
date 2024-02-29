@@ -14,6 +14,8 @@
 
 float getDistance(int t, int z);
 
+void calibration();
+void resolution();
 void scan();
 
 
