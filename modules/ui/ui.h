@@ -19,8 +19,6 @@ int readDial(int div);
 bool readEnter();
 bool readBack();
 
-void editIntegerParameter(uint16_t x, uint16_t y, int param, int min, int max);
-
 //=====[#include guards - end]=================================================
 
 #endif // _UI_H_
