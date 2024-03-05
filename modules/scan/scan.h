@@ -5,8 +5,8 @@
 
 #include <stdint.h>
 
-#define THETA_RESOLUTION 120
-#define Z_RESOLUTION 100
+#define THETA_RESOLUTION 296
+#define Z_RESOLUTION 150
 
 //=====[Declaration of public defines]=========================================
 
@@ -14,10 +14,8 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
-float getDistance(int t, int z);
+uint16_t getSensorReading(int t, int z);
 
-void calibration();
-void resolution();
 void scan();
 
 

@@ -11,8 +11,8 @@
 
 //=====[Declaration of private defines]========================================
 
-#define TOTAL_STEP_THETA 16 * 16 * 15
-#define TOTAL_STEP_Z 30000
+#define TOTAL_STEP_THETA 3848
+#define TOTAL_STEP_Z 51300
 
 #define THETA_INCREMENT TOTAL_STEP_THETA / THETA_RESOLUTION
 #define Z_INCREMENT TOTAL_STEP_Z / Z_RESOLUTION
@@ -23,7 +23,7 @@
 int theta_step = 0;
 int z_step = 0;
 
-int16_t distanceArray[Z_RESOLUTION][THETA_RESOLUTION];
+uint16_t distanceArray[Z_RESOLUTION][THETA_RESOLUTION];
 
 //=====[Declaration and initialization of public global objects]===============
 
@@ -37,7 +37,7 @@ int16_t distanceArray[Z_RESOLUTION][THETA_RESOLUTION];
 
 //=====[Implementations of public functions]===================================
 
-float getDistance(int t, int z) {
+uint16_t getSensorReading(int t, int z) {
     return distanceArray[z][t];
 }
 
@@ -56,10 +56,11 @@ void scan() {
             tftDrawString(140, 140, TXT_SEL, str1, 4);
             distanceArray[z_step][theta_step] = readSensor();
             stepTheta(THETA_INCREMENT);
-        }   
+        }
         stepZ(Z_INCREMENT);
     }
     tftShadeRect(30, 100, 210, 220, 0x0000);
+    stepZ(-TOTAL_STEP_Z);
     tftDrawCenteredString(120, 100, TXT_HEAD, "scan complete", 13);
 }
 

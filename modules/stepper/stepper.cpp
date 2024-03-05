@@ -58,9 +58,9 @@ void stepZ(int n) {
     }
     for(int i = 0; i < n; i++) {
         ZStep.write(true);
-        wait_us(5);
+        wait_us(1000);
         ZStep.write(false);
-        wait_us(5);
+        wait_us(1000);
     }
 }
 
