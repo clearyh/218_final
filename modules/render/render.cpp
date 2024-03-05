@@ -17,7 +17,7 @@
 #define R_SCANNER 20
 #define SENSOR_DIR_Z 10
 #define CAMERA_FOV_X 68
-#define CAMERA_FOV_Y 90
+#define CAMERA_FOV_Z 90
 
 
 //=====[Declaration of private data types]=====================================
@@ -26,7 +26,8 @@ int theta_step = 0;
 int z_step = 0;
 
 Vector virtualCameraPosition(20, 0, 20);
-Vector virtualCameraDirection(-1, 0, -.5);
+Vector virtualCameraDirection_X(-1, 0, 0);
+Vector virtualCameraDirection(-1, 0, -0.5);
 
 //=====[Declaration and initialization of public global objects]===============
 
@@ -40,8 +41,11 @@ Vector virtualCameraDirection(-1, 0, -.5);
 
 static Vector getSensorPosition(int t_s, int z_s);
 static Vector getSensorDirection(int t_s, int z_s);
+static Vector getSurfacePoint(int t_s, int z_s);
 static float getDistance(int t_s, int z_s);
 static void renderPoint(int t_s, int z_s);
+static uint16_t getXPixel(Vector v);
+static uint16_t getYPixel(Vector v);
 
 
 //=====[Implementations of public functions]===================================
@@ -50,15 +54,29 @@ void render() {
     tftShadeRect(0, 0, 240, 320, 0x0000);
     for(int z_step = 0; z_step < Z_RESOLUTION; z_step++) {
         for(int theta_step = 0; theta_step < THETA_RESOLUTION; theta_step++) {
-            Vector sensor_pos = getSensorPosition(theta_step, z_step);
-            Vector sensor_dir = getSensorDirection(theta_step, z_step);
-            float distance = getDistance(theta_step, z_step);
-            sensor_dir.scale(distance);
-            Vector surface_point = sensor_pos.sum(sensor_dir);
-            Vector point_to_camera = virtualCameraPosition.diff(surface_point);
+            Vector surface_point = getSurfacePoint(theta_step, z_step);
+            Vector point_to_camera = surface_point.diff(virtualCameraPosition);
             float cameraDistance = point_to_camera.magnitude();
+            Vector ptc_X(point_to_camera.x, point_to_camera.y, 0);
+            float angle_x = ptc_X.angle(virtualCameraDirection_X);
+            if (point_to_camera.y > 0) angle_x = -angle_x;
+            angle_x += 34;
+            float x_screen_proportion = angle_x / CAMERA_FOV_X;
+            if (x_screen_proportion >= 0 && x_screen_proportion <= 1) {
+                uint16_t xP = (uint16_t)(x_screen_proportion * 240);
+                Vector ptc_Z(point_to_camera.x, 0, point_to_camera.z);
+                ptc_Z.normalize();
+                virtualCameraDirection.normalize();
+                float angle_z = ptc_Z.angle(virtualCameraDirection);
+                if (ptc_Z.z < virtualCameraDirection.z) angle_z = -angle_z;
+                angle_x += 45;
+                float z_screen_proportion = angle_z / CAMERA_FOV_Z;
+                if (z_screen_proportion >= 0 && z_screen_proportion <= 1) {
+                    uint16_t yP = (uint16_t)(z_screen_proportion * 320);
 
+                }
 
+            }
         }
     }
 }
@@ -73,6 +91,22 @@ static float getDistance(int t_s, int z_s) {
     return ret;
 }
 
+static Vector getSurfacePoint(int t_s, int z_s) {
+    Vector sensor_pos = getSensorPosition(t_s, z_s);
+    Vector sensor_dir = getSensorDirection(t_s, z_s);
+    float distance = getDistance(t_s, z_s);
+    sensor_dir.scale(distance);
+    return sensor_pos.sum(sensor_dir);
+}
+
+static Vector getSensorPosition(int t_s, int z_s) {
+    return Vector(0, 0, 0);
+}
+
+static Vector getSensorDirection(int t_s, int z_s) {
+
+    return Vector(0, 0, 0);
+}
 
 Vector::Vector(float x0, float y0, float z0) {
     x = x0;
