@@ -11,8 +11,8 @@
 
 //=====[Declaration of private defines]========================================
 
-#define TOTAL_STEP_THETA 3848
-#define TOTAL_STEP_Z 17100
+#define TOTAL_STEP_THETA 2565
+#define TOTAL_STEP_Z 10260
 
 #define THETA_INCREMENT TOTAL_STEP_THETA / THETA_RESOLUTION
 #define Z_INCREMENT TOTAL_STEP_Z / Z_RESOLUTION
@@ -57,8 +57,8 @@ void scan() {
         stepZ(Z_INCREMENT);
     }
     tftShadeRect(30, 100, 210, 220, 0x0000);
-    stepZ(-TOTAL_STEP_Z);
     tftDrawCenteredString(120, 100, TXT_HEAD, "scan complete", 13);
+    stepZ(-TOTAL_STEP_Z);
 }
 
 //=====[Implementations of private functions]==================================
