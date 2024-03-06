@@ -22,9 +22,6 @@
 
 //=====[Declaration of private data types]=====================================
 
-int theta_step = 0;
-int z_step = 0;
-
 Vector virtualCameraPosition(20, 0, 20);
 Vector virtualCameraDirection_X(-1, 0, 0);
 Vector virtualCameraDirection(-1, 0, -0.5);
@@ -44,8 +41,7 @@ static Vector getSensorDirection(int t_s, int z_s);
 static Vector getSurfacePoint(int t_s, int z_s);
 static float getDistance(int t_s, int z_s);
 static void renderPoint(int t_s, int z_s);
-static uint16_t getXPixel(Vector v);
-static uint16_t getYPixel(Vector v);
+static uint16_t getColor(float dist);
 
 
 //=====[Implementations of public functions]===================================
@@ -106,6 +102,10 @@ static Vector getSensorPosition(int t_s, int z_s) {
 static Vector getSensorDirection(int t_s, int z_s) {
 
     return Vector(0, 0, 0);
+}
+
+static uint16_t getColor(float dist) {
+    
 }
 
 Vector::Vector(float x0, float y0, float z0) {
