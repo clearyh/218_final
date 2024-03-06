@@ -5,8 +5,8 @@
 
 #include <stdint.h>
 
-#define THETA_RESOLUTION 296
-#define Z_RESOLUTION 150
+#define THETA_RESOLUTION 148
+#define Z_RESOLUTION 2
 
 //=====[Declaration of public defines]=========================================
 

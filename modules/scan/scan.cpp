@@ -12,16 +12,13 @@
 //=====[Declaration of private defines]========================================
 
 #define TOTAL_STEP_THETA 3848
-#define TOTAL_STEP_Z 51300
+#define TOTAL_STEP_Z 17100
 
 #define THETA_INCREMENT TOTAL_STEP_THETA / THETA_RESOLUTION
 #define Z_INCREMENT TOTAL_STEP_Z / Z_RESOLUTION
 
 
 //=====[Declaration of private data types]=====================================
-
-int theta_step = 0;
-int z_step = 0;
 
 uint16_t distanceArray[Z_RESOLUTION][THETA_RESOLUTION];
 
@@ -46,7 +43,7 @@ void scan() {
     tftDrawCenteredString(120, 100, TXT_HEAD, "scan in progress", 16);
     tftDrawString(30, 140, TXT_NSEL, "! step:", 7);
     tftDrawString(30, 180, TXT_NSEL, "Z step:", 7);
-    for(z_step = 0; z_step < Z_RESOLUTION; z_step++) {
+    for(int z_step = 0; z_step < Z_RESOLUTION; z_step++) {
         char str2[5];
         sprintf(str2, "%.4i", z_step);
         tftDrawString(140, 180, TXT_SEL, str2, 4);

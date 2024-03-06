@@ -42,9 +42,9 @@ void stepTheta(int n) {
     }
     for(int i = 0; i < n; i++) {
         ThetaStep.write(true);
-        wait_us(5);
+        wait_us(1000);
         ThetaStep.write(false);
-        wait_us(5);
+        wait_us(1000);
     }
 }
 

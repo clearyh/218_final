@@ -9,14 +9,14 @@
 //=====[Declaration of private defines]========================================
 
 #define VREF 3.3
-#define V1 0.3
+#define V1 0.3 // V1, V2, I2, and I1 are datapoints for the linear model to convert sensor voltage to a distance.
 #define V2 2.01
 #define I1 .024
 #define I2 0.155
 #define M (I2 - I1)/(V2 - V1)
-#define R_SCANNER 20
-#define SENSOR_DIR_Z 10
-#define CAMERA_FOV_X 68
+#define R_SCANNER 20 // The distance on xy plane of the sensor from the center of rotation
+#define SENSOR_DZ 10 // variable for the downward tilt of the sensor
+#define CAMERA_FOV_X 68 // camera fov on 2 axes in degrees - note 68/90 ~= 240/320, the display aspect ratio
 #define CAMERA_FOV_Z 90
 
 
@@ -40,7 +40,6 @@ static Vector getSensorPosition(int t_s, int z_s);
 static Vector getSensorDirection(int t_s, int z_s);
 static Vector getSurfacePoint(int t_s, int z_s);
 static float getDistance(int t_s, int z_s);
-static void renderPoint(int t_s, int z_s);
 static uint16_t getColor(float dist);
 
 
@@ -48,8 +47,8 @@ static uint16_t getColor(float dist);
 
 void render() {
     tftShadeRect(0, 0, 240, 320, 0x0000);
-    for(int z_step = 0; z_step < Z_RESOLUTION; z_step++) {
-        for(int theta_step = 0; theta_step < THETA_RESOLUTION; theta_step++) {
+    for(int z_step = 0; z_step < Z_RESOLUTION; z_step++) { // iterate through Z
+        for(int theta_step = 0; theta_step < THETA_RESOLUTION; theta_step++) { // iterate through theta
             Vector surface_point = getSurfacePoint(theta_step, z_step);
             Vector point_to_camera = surface_point.diff(virtualCameraPosition);
             float cameraDistance = point_to_camera.magnitude();
@@ -69,9 +68,9 @@ void render() {
                 float z_screen_proportion = angle_z / CAMERA_FOV_Z;
                 if (z_screen_proportion >= 0 && z_screen_proportion <= 1) {
                     uint16_t yP = (uint16_t)(z_screen_proportion * 320);
-
+                    uint16_t color = getColor(cameraDistance);
+                    tftShadePixel(xP, yP, color);
                 }
-
             }
         }
     }
@@ -105,6 +104,14 @@ static Vector getSensorDirection(int t_s, int z_s) {
 }
 
 static uint16_t getColor(float dist) {
+    float c_f = dist * 63 / 40;
+    if (c_f < 0) c_f = 0;
+    if (c_f > 63) c_f = 63;
+    uint16_t c_i = (uint16_t) c_f;
+    uint16_t color = c_i;
+    color = (color & (c_i << 5));
+    color = (color & (c_i << 11));
+    return color;
     
 }
 
