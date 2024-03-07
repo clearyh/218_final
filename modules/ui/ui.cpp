@@ -3,7 +3,6 @@
 #include "mbed.h"
 #include "arm_book_lib.h"
 #include "tft.h"
-#include "ui.h"
 
 //=====[Declaration of private defines]========================================
 
@@ -32,9 +31,7 @@ void uiInit() {
 }
 
 int readDial(int div) {
-    float f = dial.read();
-    float d = 1.0 / div;
-    return (int) (f/d);
+    return (int) (dial.read()*div);
 }
 
 bool readEnter() {
@@ -43,6 +40,22 @@ bool readEnter() {
 
 bool readBack() {
     return back.read();
+}
+
+int runMenu(char **entries, int *entry_lengths, int length) {
+    int current_select = 0;
+    for (int i = 0; i < length; i++) {
+        tftDrawCenteredString(120, 100 + 40 * i, TXT_NSEL, entries[i], entry_lengths[i]);
+    }
+    while (!readEnter()) {
+        int next_select = readDial(length);
+        if (next_select != current_select) {
+            tftDrawCenteredString(120, 100 + 40 * current_select, TXT_NSEL, entries[current_select], entry_lengths[current_select]);
+            tftDrawCenteredString(120, 100 + 40 * next_select, TXT_ENTR, entries[next_select], entry_lengths[next_select]);
+            current_select = next_select;
+        }
+    }
+    return current_select;
 }
 
 

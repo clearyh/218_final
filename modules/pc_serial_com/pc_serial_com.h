@@ -1,26 +1,14 @@
 //=====[#include guards - begin]===============================================
 
-#ifndef _UI_H_
-#define _UI_H_
-
-#include <stdint.h>
+#ifndef _PC_SERIAL_COM_H_
+#define _PC_SERIAL_COM_H_
 
 //=====[Declaration of public defines]=========================================
 
 //=====[Declaration of public data types]======================================
 
-
-
 //=====[Declarations (prototypes) of public functions]=========================
-
-void uiInit();
-
-int readDial(int div);
-bool readEnter();
-bool readBack();
-
-int runMenu(char **entries, int *entry_lengths, int length);
 
 //=====[#include guards - end]=================================================
 
-#endif // _UI_H_
+#endif // _PC_SERIAL_COM_H_

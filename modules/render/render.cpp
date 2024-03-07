@@ -4,7 +4,7 @@
 #include "arm_book_lib.h"
 #include "render.h"
 #include "scan.h"
-#import "tft.h"
+#include "tft.h"
 
 //=====[Declaration of private defines]========================================
 
@@ -14,7 +14,7 @@
 #define I1 .024
 #define I2 0.155
 #define M (I2 - I1)/(V2 - V1)
-#define R_SCANNER 20 // The distance on xy plane of the sensor from the center of rotation
+#define R_SENSOR 15.24 // The distance on xy plane of the sensor from the center of rotation
 #define SENSOR_DZ 10 // variable for the downward tilt of the sensor
 #define CAMERA_FOV_X 68 // camera fov on 2 axes in degrees - note 68/90 ~= 240/320, the display aspect ratio
 #define CAMERA_FOV_Z 90
@@ -47,8 +47,10 @@ static uint16_t getColor(float dist);
 
 void render() {
     tftShadeRect(0, 0, 240, 320, 0x0000);
-    for(int z_step = 0; z_step < Z_RESOLUTION; z_step++) { // iterate through Z
-        for(int theta_step = 0; theta_step < THETA_RESOLUTION; theta_step++) { // iterate through theta
+    int z_res = getZres();
+    int t_res = getTres();
+    for(int z_step = 0; z_step < z_res; z_step++) { // iterate through Z
+        for(int theta_step = 0; theta_step < t_res; theta_step++) { // iterate through theta
             Vector surface_point = getSurfacePoint(theta_step, z_step);
             Vector point_to_camera = surface_point.diff(virtualCameraPosition);
             float cameraDistance = point_to_camera.magnitude();
@@ -74,6 +76,7 @@ void render() {
             }
         }
     }
+    tftDrawCenteredString(120, 100, TXT_HEAD, "render", 6);
 }
 
 //=====[Implementations of private functions]==================================
@@ -95,12 +98,22 @@ static Vector getSurfacePoint(int t_s, int z_s) {
 }
 
 static Vector getSensorPosition(int t_s, int z_s) {
-    return Vector(0, 0, 0);
+    float theta = 360.0 * t_s / getTres();
+    float v_z = 20.0 * z_s / getZres();
+    float v_x = R_SENSOR * cos(theta);
+    float v_y = R_SENSOR * sin(theta);
+
+    return Vector(v_x, v_y, v_z);
+
 }
 
 static Vector getSensorDirection(int t_s, int z_s) {
-
-    return Vector(0, 0, 0);
+    float theta = 360.0 * t_s / getTres();
+    float v_x = -R_SENSOR * cos(theta);
+    float v_y = -R_SENSOR * sin(theta);
+    Vector ret(v_x, v_y, -SENSOR_DZ);
+    ret.normalize();
+    return ret;
 }
 
 static uint16_t getColor(float dist) {

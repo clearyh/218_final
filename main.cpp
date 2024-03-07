@@ -1,8 +1,7 @@
 //=====[Libraries]=============================================================
 
 #include "arm_book_lib.h"
-#include "tft.h"
-#include "ui.h"
+#include "system.h"
 #include "scan.h"
 #include "stepper.h"
 
@@ -10,8 +9,8 @@
 
 int main()
 {
-    tftInit();
-    scan();
+    systemInit();
+    mainMenu();
     while (true) {
     }
 }

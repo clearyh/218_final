@@ -11,6 +11,10 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
+void systemInit();
+
+void mainMenu();
+
 //=====[#include guards - end]=================================================
 
 #endif // _SYSTEM_H_
