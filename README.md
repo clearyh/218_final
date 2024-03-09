@@ -50,4 +50,4 @@ TESTS
 =
 |Test:|Functionality:|Comments:|
 |:----|:----|:----|
-|Test|TEST|Test|
+|Full Motion Test|Stepper Motors|Completed an exact 360° rotation, SUCCESS|
