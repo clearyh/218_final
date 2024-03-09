@@ -2,18 +2,20 @@
 
 #include "mbed.h"
 #include "arm_book_lib.h"
+#include "render.h"
 #include "scan.h"
 #include "ui.h"
 #include "tft.h"
 #include "sensor.h"
 #include "stepper.h"
 #include "system.h"
+#include "pc_serial_com.h"
 
 
 //=====[Declaration of private defines]========================================
 
 #define TOTAL_STEP_THETA 2565
-#define TOTAL_STEP_Z 10260
+#define TOTAL_STEP_Z 7695
 
 
 //=====[Declaration of private data types]=====================================
@@ -31,8 +33,8 @@ uint16_t distanceArray[Z_RESOLUTION_MAX][THETA_RESOLUTION_MAX];
 int theta_inc = TOTAL_STEP_THETA / THETA_RESOLUTION_MAX;
 int z_inc = TOTAL_STEP_Z / Z_RESOLUTION_MAX;
 
-int t_res = 285; // actual resolution
-int z_res = 180;
+int t_res = 10; // actual resolution
+int z_res = 1;
 
 char *resolution_menu_text[4] = {"45 x 30", "95 x 60", "171 x 90", "285 x 180"};
 int resolution_menu_lengths[4] = {7, 7, 8, 9};
@@ -43,11 +45,8 @@ static void updateIncrement();
 
 //=====[Implementations of public functions]===================================
 
-uint16_t getSensorReading(int t, int z) {
-    return distanceArray[z][t];
-}
-
 void scan() {
+    updateIncrement();
     tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 100, TXT_HEAD, "scan in progress", 16);
     tftDrawString(30, 140, TXT_NSEL, "! step:", 7);
@@ -61,6 +60,9 @@ void scan() {
             sprintf(str1, "%.4i", theta_step);
             tftDrawString(140, 140, TXT_SEL, str1, 4);
             distanceArray[z_step][theta_step] = readSensor();
+            char float_string[6];
+            sprintf(float_string, "%.3f", getDistance(z_step, theta_step));
+            uartWriteString(float_string, 7);
             stepTheta(theta_inc);
         }
         stepZ(z_inc);
@@ -73,7 +75,7 @@ void scan() {
 
 void resolution() {
     tftShadeRect(0, 0, 240, 320, 0x0000);
-    tftDrawCenteredString(120, 60, TXT_HEAD, "set resolution", 14);
+    tftDrawCenteredString(120, 20, TXT_HEAD, "set resolution", 14);
     switch(runMenu(resolution_menu_text, resolution_menu_lengths, 4)) {
         case 0:
             t_res = 45;
@@ -97,12 +99,53 @@ void resolution() {
     mainMenu();
 }
 
+void calibration() {
+    tftShadeRect(0, 0, 240, 320, 0x0000);
+    tftDrawCenteredString(120, 100, TXT_HEAD, "calibrate Z axis", 16);
+    while (!readEnter()) {
+        switch (readDial(3)) {
+            case 0:
+                stepZ(-10);
+                wait_us(10);
+                break;
+            case 1:
+                wait_us(10);
+                break;
+            case 2:
+                stepZ(10);
+                wait_us(10);
+                break;
+        }
+    }
+    tftDrawCenteredString(120, 100, TXT_HEAD, "calibrate ! axis", 16);
+    while (!readEnter()) {
+        switch (readDial(3)) {
+            case 0:
+                stepTheta(-10);
+                delay(1);
+                break;
+            case 1:
+                delay(1);
+                break;
+            case 2:
+                stepTheta(10);
+                delay(1);
+                break;
+        }
+    }
+    mainMenu();
+}
+
 int getTres() {
     return t_res;
 }
 
 int getZres() {
     return z_res;
+}
+
+uint16_t getSensorReading(int t, int z) {
+    return distanceArray[z][t];
 }
 
 //=====[Implementations of private functions]==================================

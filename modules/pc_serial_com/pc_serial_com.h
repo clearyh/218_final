@@ -9,6 +9,8 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
+void uartWriteString(char* str, int len);
+
 //=====[#include guards - end]=================================================
 
 #endif // _PC_SERIAL_COM_H_

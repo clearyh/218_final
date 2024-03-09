@@ -4,6 +4,7 @@
 #include "system.h"
 #include "scan.h"
 #include "stepper.h"
+#include "sensor.h"
 
 //=====[Main function, the program entry point after power on or reset]========
 
@@ -12,5 +13,6 @@ int main()
     systemInit();
     mainMenu();
     while (true) {
+        
     }
 }

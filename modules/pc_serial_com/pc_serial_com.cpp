@@ -21,3 +21,8 @@ UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
 //=====[Declarations (prototypes) of private functions]========================
 
 //=====[Implementations of public functions]===================================
+
+void uartWriteString(char* str, int len)
+{
+    uartUsb.write( str, len);
+}

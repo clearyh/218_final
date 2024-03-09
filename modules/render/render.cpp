@@ -4,7 +4,10 @@
 #include "arm_book_lib.h"
 #include "render.h"
 #include "scan.h"
+#include "ui.h"
+#include "system.h"
 #include "tft.h"
+#include "pc_serial_com.h"
 
 //=====[Declaration of private defines]========================================
 
@@ -39,7 +42,7 @@ Vector virtualCameraDirection(-1, 0, -0.5);
 static Vector getSensorPosition(int t_s, int z_s);
 static Vector getSensorDirection(int t_s, int z_s);
 static Vector getSurfacePoint(int t_s, int z_s);
-static float getDistance(int t_s, int z_s);
+
 static uint16_t getColor(float dist);
 
 
@@ -79,9 +82,48 @@ void render() {
     tftDrawCenteredString(120, 100, TXT_HEAD, "render", 6);
 }
 
+void transmit() {
+    tftShadeRect(0, 0, 240, 320, 0x0000);
+    tftDrawCenteredString(120, 100, TXT_HEAD, "transmitting", 12);
+    int z_res = getZres();
+    int t_res = getTres();
+    char *openbracket = "[";
+    char *closebracket = "]";
+    char *comma = ",";
+    uartWriteString(openbracket, 1);
+    for(int z_step = 0; z_step < z_res; z_step++) { // iterate through Z
+        uartWriteString(openbracket, 1);
+        for(int theta_step = 0; theta_step < t_res; theta_step++) { // iterate through theta
+            uartWriteString(openbracket, 1);
+            Vector surface_point = getSurfacePoint(theta_step, z_step);
+            char float_string[6];
+            sprintf(float_string, "%.3f", surface_point.x);
+            uartWriteString(float_string, 7);
+            uartWriteString(comma, 1);
+            sprintf(float_string, "%.3f", surface_point.y);
+            uartWriteString(float_string, 7);
+            uartWriteString(comma, 1);
+            sprintf(float_string, "%.3f", surface_point.z);
+            uartWriteString(float_string, 7);
+            uartWriteString(closebracket, 1);
+            uartWriteString(comma, 1);
+        }
+        uartWriteString(closebracket, 1);
+        uartWriteString(comma, 1);
+
+    }
+    uartWriteString(closebracket, 1);
+    tftDrawCenteredString(120, 100, TXT_HEAD, "transmission", 12);
+    tftDrawCenteredString(120, 140, TXT_HEAD, "complete", 8);
+    while (!readEnter()) {
+
+    }
+    mainMenu();
+}
+
 //=====[Implementations of private functions]==================================
 
-static float getDistance(int t_s, int z_s) {
+float getDistance(int t_s, int z_s) {
     uint16_t sensor_reading = getSensorReading(t_s, z_s);
     float voltage = VREF * (1.0 * sensor_reading / UINT16_MAX);
     float inverse = (voltage - V1) * M + I1;
@@ -98,13 +140,11 @@ static Vector getSurfacePoint(int t_s, int z_s) {
 }
 
 static Vector getSensorPosition(int t_s, int z_s) {
-    float theta = 360.0 * t_s / getTres();
+    float theta = 3.1415926 * 2 * t_s / getTres();
     float v_z = 20.0 * z_s / getZres();
     float v_x = R_SENSOR * cos(theta);
     float v_y = R_SENSOR * sin(theta);
-
     return Vector(v_x, v_y, v_z);
-
 }
 
 static Vector getSensorDirection(int t_s, int z_s) {

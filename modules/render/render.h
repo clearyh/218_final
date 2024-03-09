@@ -26,6 +26,9 @@ class Vector {
 //=====[Declarations (prototypes) of public functions]=========================
 
 void render();
+void projection();
+void transmit();
+float getDistance(int t_s, int z_s);
 
 //=====[#include guards - end]=================================================
  

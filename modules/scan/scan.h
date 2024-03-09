@@ -5,8 +5,8 @@
 
 #include <stdint.h>
 
-#define THETA_RESOLUTION_MAX 296 // max resolution (for array size)
-#define Z_RESOLUTION_MAX 150
+#define THETA_RESOLUTION_MAX 285 // max resolution (for array size)
+#define Z_RESOLUTION_MAX 180
 
 //=====[Declaration of public defines]=========================================
 
@@ -23,6 +23,7 @@ int getTres();
 
 void scan();
 void resolution();
+void calibration();
 
 
 //=====[#include guards - end]=================================================
