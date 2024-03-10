@@ -1,6 +1,6 @@
 //=====[Libraries]=============================================================
 
-#include "mbed.h"
+#include "mbed.h" //including the basic libraries
 #include "arm_book_lib.h"
 
 //=====[Declaration of private defines]========================================
@@ -10,10 +10,11 @@
 
 //=====[Declaration and initialization of public global objects]===============
 
-DigitalOut ThetaDir(D0);
-DigitalOut ZDir(D1);
-DigitalOut ThetaStep(D2);
-DigitalOut ZStep(D3);
+//theta is the rotational axis, z is the vertical axis
+DigitalOut ThetaDir(D0); //theta direction
+DigitalOut ZDir(D1); //z direction
+DigitalOut ThetaStep(D2); //theta step, 
+DigitalOut ZStep(D3); //z step
 
 //=====[Declaration of external public global variables]=======================
 
@@ -25,14 +26,14 @@ DigitalOut ZStep(D3);
 
 //=====[Implementations of public functions]===================================
 
-void stepperInit() {
+void stepperInit() { //initialization function for our outputs
     ThetaDir.write(true);
     ZDir.write(true);
     ThetaStep.write(false);
     ZStep.write(false);
 }
 
-void stepTheta(int n) {
+void stepTheta(int n) { //n is number of steps, positive/negative will determine direction
     if (n < 0) {
         ThetaDir.write(false); 
         n = 0 - n;
@@ -48,7 +49,7 @@ void stepTheta(int n) {
     }
 }
 
-void stepZ(int n) {
+void stepZ(int n) { //n is number of steps, positive/negative will determine direction
     if (n < 0) {
         ZDir.write(false); 
         n = 0 - n;
