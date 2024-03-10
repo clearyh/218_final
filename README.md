@@ -50,4 +50,5 @@ TESTS
 =
 |Test:|Functionality:|Comments:|
 |:----|:----|:----|
-|Full Motion Test|Stepper Motors|Completed an exact 360° rotation, SUCCESS|
+|Full Motion Test - theta axis|Stepper Motors|Completed an exact 360° rotation in 3 trials|
+|Full motion test - Z axis|Stepper motors|Z axis has a full range of ~4.75 inches, which is consistent across 3 trials|
