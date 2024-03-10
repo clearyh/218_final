@@ -14,9 +14,12 @@ There are a total of eight modules, pc_serial_com, render, scan, sensor, stepper
 
 pc_serial_com: (Based on textbook code)
 - facilitates communication between the Nucleo and serial monitors on devices.
+- single public function - to send a string of a specified length to serial monitor.
 
 render: (Written from scratch)
 - transforms the array of distance points into an array of values for our display.
+- render function - iterates through each measurement and converts it to a 2D coordinate in the screen space and colors the corresponding pixel
+- transmit function - iterates through each measurement and converts it to 3D cartesian coordinate representing a point on the surface of the target object, then transmits this coordinate in human-readable ASCII using pc_serial_com module. 
 
 Scan: (Written from scratch)
 - activates our LiDAR sensor to detect distance.
@@ -30,31 +33,38 @@ Stepper: (Written from scratch)
 - will raise the sensor for each rotation until the specified scanning arc chosen by the user is achieved.
 
 System: (Written from scratch)
-- combines the rest of the modules to present a verifiable output.
+- initiates user inputs and tft
+- mainMenu function - runs the main menu, allowing user to choose the next process from 5 options: resolution, calibration, scan, render, and transmit.
 
 tft: (Written from scratch)
-- controls and handles the display outputs.
-- shows the ui and its choices.
+- interfaces with the display
+- initializes the display be sending a sequence of commands
+- functions to change single pixels or rectangle regions to a single color
+- functions to write strings at particular xy coordinates
+- includes font.h, constant data for drawing characters on the screen (preexisting, but original)
 
 ui: (Written from scratch)
-- provides the user a selection of choices upon startup.
-- these inputs control what directive the system follows.
+- takes data from the user input components and calls tft module to drive interactive text menus.
+- function readEnter returns boolean true when the enter button is pressed
+- function readDial takes an integer argument div and returns an integer on [0, div) corresponding to the position of the potentiometer wiper
+- function runMenu takes an array of pointers to character arrays, the lengths of these character arrays, and an integer length. the arrays are displayed as text menu options, and the user can use the dial to select one of the options. an integer corresponding to the selected option is returned.
 
 Structure
-=
 The full structure of this device includes the following hardware peripherals and their connections to the Nucleo-F429ZI:
-1. TFT_ST7789V
-   - 3.3V, GND, PF12, PA5, PD15, PD14, PA7, PA6
-3. MP6500 Stepper Motor Driver
-   - 3.3V, GND, PE13, PG14, PF15, PG9, connections to motors
-5. Stepper Motor
-   - Connections to drivers
+1. TFT_ST7789V (TFT driver chip on Adafruit 240x320 TFT display)
+   - 3.3V, GND, PF12, PA5, PD15, PD14, PA7, PA6 (SPI interface with additional data/command signal and reset pin)
+3. 2x MP6500 Stepper Motor Driver (on pololu breakout board)
+   - 3.3V, GND, PE13, PG14, PF15, PG9, (step input and direction input for 2 boards), 5V for motor power
+5. 2x Stepper Motor
+   - 2 connections to each motor solenoid from driver board x 2 solenoids per motor x 2 motors = 8 connections
 7. GP2Y0A41SK0F Analog output type distance measuring Sensor
-   - 5V, GND, PC0
+   - 5V, GND, PC0 (analog output varying from ~0 to ~3.3V)
   
 TESTS
 =
 |Test:|Functionality:|Comments:|
 |:----|:----|:----|
-|Full Motion Test - theta axis|Stepper Motors|Completed an exact 360° rotation in 3 trials|
+|Full Motion Test - theta axis|Stepper Motors|Completed an exact 360° rotation consistently in 3 trials|
 |Full motion test - Z axis|Stepper motors|Z axis has a full range of ~4.75 inches, which is consistent across 3 trials|
+|Spatial resolution test|NUCLEO ADC|The smallest variation in distance distinguishable by the ADC for a surface approximately 6cm from the sensor is 0.03mm|
+
