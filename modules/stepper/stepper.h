@@ -11,10 +11,10 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
-void stepperInit();
+void stepperInit(); //initialization function
 
-void stepTheta(int n);
-void stepZ(int n);
+void stepTheta(int n); //determines movement in the rotational axis
+void stepZ(int n); //determines movement in the vertical axis
 
 //=====[#include guards - end]=================================================
  
