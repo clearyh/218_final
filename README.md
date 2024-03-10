@@ -62,9 +62,11 @@ The full structure of this device includes the following hardware peripherals an
   
 TESTS
 =
-|Test:|Functionality:|Comments:|
+|Test:|Subsystem:|Results:|
 |:----|:----|:----|
 |Full Motion Test - theta axis|Stepper Motors|Completed an exact 360° rotation consistently in 3 trials|
-|Full motion test - Z axis|Stepper motors|Z axis has a full range of ~4.75 inches, which is consistent across 3 trials|
-|Spatial resolution test|NUCLEO ADC|The smallest variation in distance distinguishable by the ADC for a surface approximately 6cm from the sensor is 0.03mm|
+|Full motion test - Z axis|Stepper motors|Z axis has a full range of 12cm, which is consistent across 3 trials. Carriage is able to reset to its exact starting position after each scan.|
+|Spatial resolution test - ADC|NUCLEO ADC|The smallest variation in distance distinguishable by the ADC for a surface approximately 6cm from the sensor is 0.03mm|
+|Spatial resolution test - Sensor signal noise|Distance sensor||
+|Spatial resolution test - Sensor FOV|Distance sensor||
 
