@@ -10,7 +10,13 @@ increment. The resulting scanned model is then shown on the display.
 
 Modules
 =============================================================================
-There are a total of six modules, scan, sensor, stepper, system, tft, and ui. 
+There are a total of eight modules, pc_serial_com, render, scan, sensor, stepper, system, tft, and ui. 
+
+pc_serial_com: (Based on textbook code)
+- facilitates communication between the Nucleo and serial monitors on devices.
+
+render: (Written from scratch)
+- transforms the array of distance points into an array of values for our display.
 
 Scan: (Written from scratch)
 - activates our LiDAR sensor to detect distance.
