@@ -25,7 +25,7 @@
 
 //=====[Declaration of private data types]=====================================
 
-Vector virtualCameraPosition(20, 0, 20);
+Vector virtualCameraPosition(20, 0, 20); // setting position and direction of virtual camera
 Vector virtualCameraDirection_X(-1, 0, 0);
 Vector virtualCameraDirection(-1, 0, -0.5);
 
@@ -39,15 +39,22 @@ Vector virtualCameraDirection(-1, 0, -0.5);
 
 //=====[Declarations (prototypes) of private functions]========================
 
-static Vector getSensorPosition(int t_s, int z_s);
+static Vector getSensorPosition(int t_s, int z_s); 
+// gets 3D coordinate of sensor for a certain theta and Z
 static Vector getSensorDirection(int t_s, int z_s);
+// gets 3D coordinate of sensor direction for a certain theta and Z
 static Vector getSurfacePoint(int t_s, int z_s);
+//gets 3D coordinate of a point on the target objects surface for a certain theta and Z
 
+
+//gets a color for the renderer based on distance
 static uint16_t getColor(float dist);
 
 
 //=====[Implementations of public functions]===================================
 
+
+//function to render data to the screen
 void render() {
     tftShadeRect(0, 0, 240, 320, 0x0000);
     int z_res = getZres();
@@ -79,10 +86,11 @@ void render() {
             }
         }
     }
-    tftDrawCenteredString(120, 100, TXT_HEAD, "render", 6);
 }
 
-void transmit() {
+
+//transmit an array of the 3D surface point coordinates in human readable ASCII over uartUSB
+void transmit() { 
     tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 100, TXT_HEAD, "transmitting", 12);
     int z_res = getZres();
@@ -123,6 +131,8 @@ void transmit() {
 
 //=====[Implementations of private functions]==================================
 
+
+//gets a floating point distance in centimeters for a certain analogIn uint16_t data
 float getDistance(int t_s, int z_s) {
     uint16_t sensor_reading = getSensorReading(t_s, z_s);
     float voltage = VREF * (1.0 * sensor_reading / UINT16_MAX);

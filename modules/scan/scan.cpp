@@ -14,13 +14,13 @@
 
 //=====[Declaration of private defines]========================================
 
-#define TOTAL_STEP_THETA 2565
-#define TOTAL_STEP_Z 7695
+#define TOTAL_STEP_THETA 2565  // total number of stepper motor steps for 360degree rotation
+#define TOTAL_STEP_Z 7695 // total number of stepper motor steps for full range of z axis
 
 
 //=====[Declaration of private data types]=====================================
 
-uint16_t distanceArray[Z_RESOLUTION_MAX][THETA_RESOLUTION_MAX];
+uint16_t distanceArray[Z_RESOLUTION_MAX][THETA_RESOLUTION_MAX]; //array containing raw AnalogIn data for each sensor position
 
 //=====[Declaration and initialization of public global objects]===============
 
@@ -30,14 +30,16 @@ uint16_t distanceArray[Z_RESOLUTION_MAX][THETA_RESOLUTION_MAX];
 
 //=====[Declaration and initialization of private global variables]============
 
-int theta_inc = TOTAL_STEP_THETA / THETA_RESOLUTION_MAX;
-int z_inc = TOTAL_STEP_Z / Z_RESOLUTION_MAX;
+int theta_inc = TOTAL_STEP_THETA / THETA_RESOLUTION_MAX; //steps per increment theta
+int z_inc = TOTAL_STEP_Z / Z_RESOLUTION_MAX; // steps per increment Z
 
 int t_res = 10; // actual resolution
 int z_res = 1;
 
+//data for resolution menu
 char *resolution_menu_text[4] = {"45 x 30", "95 x 60", "171 x 90", "285 x 180"};
 int resolution_menu_lengths[4] = {7, 7, 8, 9};
+
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -45,34 +47,39 @@ static void updateIncrement();
 
 //=====[Implementations of public functions]===================================
 
+
+//scan function
 void scan() {
     updateIncrement();
     tftShadeRect(0, 0, 240, 320, 0x0000);
-    tftDrawCenteredString(120, 100, TXT_HEAD, "scan in progress", 16);
+    tftDrawCenteredString(120, 100, TXT_HEAD, "scan in progress", 16); // preparing tft readout
     tftDrawString(30, 140, TXT_NSEL, "! step:", 7);
     tftDrawString(30, 180, TXT_NSEL, "Z step:", 7);
-    for(int z_step = 0; z_step < z_res; z_step++) {
+    for(int z_step = 0; z_step < z_res; z_step++) { //iterating through each Z value
         char str2[5];
         sprintf(str2, "%.4i", z_step);
         tftDrawString(140, 180, TXT_SEL, str2, 4);
-        for(int theta_step = 0; theta_step < t_res; theta_step++) {
+        for(int theta_step = 0; theta_step < t_res; theta_step++) { // iterating through each theta value
             char str1[5];
             sprintf(str1, "%.4i", theta_step);
             tftDrawString(140, 140, TXT_SEL, str1, 4);
-            distanceArray[z_step][theta_step] = readSensor();
+            distanceArray[z_step][theta_step] = readSensor(); // store read sensor value in the array
+    
             char float_string[6];
             sprintf(float_string, "%.3f", getDistance(z_step, theta_step));
             uartWriteString(float_string, 7);
+
             stepTheta(theta_inc);
         }
         stepZ(z_inc);
     }
     tftShadeRect(30, 100, 210, 220, 0x0000);
-    tftDrawCenteredString(120, 100, TXT_HEAD, "scan complete", 13);
-    stepZ(-TOTAL_STEP_Z);
+    tftDrawCenteredString(120, 100, TXT_HEAD, "scan complete", 13); // tft readout
+    stepZ(-TOTAL_STEP_Z); // return z axis carriage to home
     mainMenu();
 }
 
+//function to allow the user to select scanning resolution
 void resolution() {
     tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 20, TXT_HEAD, "set resolution", 14);
@@ -99,6 +106,8 @@ void resolution() {
     mainMenu();
 }
 
+
+//function to allow the user to move both axes and set a home point
 void calibration() {
     tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 100, TXT_HEAD, "calibrate Z axis", 16);
@@ -136,20 +145,25 @@ void calibration() {
     mainMenu();
 }
 
+//returns current T resolution
 int getTres() {
     return t_res;
 }
 
+//returns current Z resolution
 int getZres() {
     return z_res;
 }
 
+// fetches raw sensor AnalogIn data from the array
 uint16_t getSensorReading(int t, int z) {
     return distanceArray[z][t];
 }
 
 //=====[Implementations of private functions]==================================
 
+
+// updates the z and theta increment when resolution is changed
 static void updateIncrement() {
     theta_inc = TOTAL_STEP_THETA / t_res;
     z_inc = TOTAL_STEP_Z / z_res;

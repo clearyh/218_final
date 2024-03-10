@@ -22,6 +22,8 @@ UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
 
 //=====[Implementations of public functions]===================================
 
+
+//write a character array of length len over uartUSB
 void uartWriteString(char* str, int len)
 {
     uartUsb.write( str, len);
