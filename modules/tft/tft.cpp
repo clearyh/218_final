@@ -55,7 +55,7 @@ static uint16_t tftDrawChar(uint16_t x0, uint16_t y0, char l, uint16_t c);
 
 //=====[Implementations of public functions]===================================
 
-void tftInit() {
+void tftInit() { // initiation sequence
     tftReset();
     tftCommand(SW_RST);
     delay(200);
@@ -75,7 +75,8 @@ void tftInit() {
     tftShadeRect(0, 0, 240, 320, 0x0000);
 }
 
-void tftSetRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye) {
+void tftSetRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye) { 
+    //sets an area of the screen from (xs, ys) to (xe, ye) for data to be written to
     if ((xs >= xe) || (ys > ye)) return;
     tftCommand(RA_SET);
     tftData((ys >> 8) & 0xFF);
@@ -90,6 +91,7 @@ void tftSetRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye) {
 }
 
 void tftShadePixel(uint16_t x, uint16_t y, uint16_t c) {
+    //changes the color of a single pixel at coordinate x, y
     tftSetRect(x, x + 1, y, y + 1);
     tftCommand(RAM_WR);
     tftData((c >> 8) & 0xFF);
@@ -97,6 +99,7 @@ void tftShadePixel(uint16_t x, uint16_t y, uint16_t c) {
 }
 
 void tftShadeRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye, uint16_t c) {
+    //changes an entire rectangle to single color c
     tftSetRect(xs, ys, xe, ye);
     tftCommand(RAM_WR);
     for (int i = 0; i < ((xe - xs)*(ye - ys)); i++) {
@@ -106,12 +109,14 @@ void tftShadeRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye, uint16_t c
 }
 
 void tftDrawString(uint16_t x, uint16_t y, uint16_t c, char *str, int len) {
+    // writes string str of length len in color c at coordinate x, y
     for (int i = 0; i < len; i++) {
         x += 2 * tftDrawChar(x, y, str[i], c);
     }
 }
 
 void tftDrawCenteredString(uint16_t x, uint16_t y, uint16_t c, char *str, int len) {
+    //writes string horizontally centered at x
     uint16_t d = 0;
     for(int i = 0; i < len; i++) {
         int mx = ((uint8_t) str[i]) - 32;
@@ -145,7 +150,8 @@ static void tftData(uint8_t arg) {
     tft_cs.write(true);
 }
 
-static uint16_t tftDrawChar(uint16_t x0, uint16_t y0, char l, uint16_t c) {
+static uint16_t tftDrawChar(uint16_t x0, uint16_t y0, char l, uint16_t c) { 
+    // draw character from font file at x, y
 	int mx = ((uint8_t) l) - 32;
 	const uint16_t *chp = font[mx];
     uint16_t ret = chp[15];

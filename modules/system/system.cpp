@@ -27,11 +27,13 @@ int main_menu_lengths[5] = {10, 11, 4, 6, 8};
 //=====[Implementations of public functions]===================================
 
 void systemInit() {
+    //initialize tft and ui
     tftInit();
     uiInit();
 }
 
 void mainMenu() {
+    // main menu function
     tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 20, TXT_HEAD, "main menu", 9);
     switch(runMenu(main_menu_text, main_menu_lengths, 5)) {

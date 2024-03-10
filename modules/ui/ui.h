@@ -15,11 +15,12 @@
 
 void uiInit();
 
-int readDial(int div);
+int readDial(int div); // functions to read the 3 user inputs
 bool readEnter();
 bool readBack();
 
-int runMenu(char **entries, int *entry_lengths, int length);
+int runMenu(char **entries, int *entry_lengths, int length); 
+//function to run a text menu with multiple options and return an int that indicates which option is selected
 
 //=====[#include guards - end]=================================================
 
