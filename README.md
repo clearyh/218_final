@@ -22,15 +22,17 @@ render: (Written from scratch)
 - transmit function - iterates through each measurement and converts it to 3D cartesian coordinate representing a point on the surface of the target object, then transmits this coordinate in human-readable ASCII using pc_serial_com module. 
 
 Scan: (Written from scratch)
-- activates our LiDAR sensor to detect distance.
-- records the theta and z points onto an array.
+- uses the stepper and sensor functions to rotate the object on theta axis and lift sensor on z axis
+- records sensor readings in an array as unsigned integers
+- resolution function - allows the user to select a scanning resolution
+- calibration function - allows the user to zero the travel of the axes
+- scan function - carries out scanning, recording data in the distanceArray. the number of samples is determined by the selected resolution
 
 Sensor: (Written from scratch)
-- reads our raw sensor input to be translated into distance.
+- single function readSensor returns unsigned 16 bit integer from the AnalogIn connected to distance sensor
 
 Stepper: (Written from scratch)
-- slowly rotates the object's platform 360° in steps.
-- will raise the sensor for each rotation until the specified scanning arc chosen by the user is achieved.
+- functions to move either the theta or z axis an integer number of steps, which can be positive or negative to represent 2 directions
 
 System: (Written from scratch)
 - initiates user inputs and tft
