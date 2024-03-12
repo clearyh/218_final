@@ -72,4 +72,5 @@ TESTS
 |Spatial Resolution Test - Sensor signal noise|Distance sensor|A range of 2.2 cm was found in error measurements|
 |Spatial Resolution Test - Sensor FOV|Distance sensor|Through testing various FOVs, a 0.125 radius FOV was found to work best at providing measurements with the least accuracy tradeoff|
 |Speed Test|System|Testing on the lowest resolution of 45 x 30, the scan took 15 minutes and 55 seconds, which was slightly longer but close to the expected 14 minutes. |
+|Full Functionality Test|System|After scanning a Rubix cube, the data points were successfully plotted in blender to show a 3D outline of the cube|
 
