@@ -8,6 +8,8 @@ This is the code for a 3D scanner that will make use of a LiDAR sensor and motor
 the ui is shown and a selection of options presents itself. During the actual scanning,  stepper motors rotate the platform in increments and use the sensor to scan and plot at each 
 increment. The resulting scanned model is then shown on the display. 
 
+Additionally to the embedded system code, python code for blender is used to turn a set of 3d points into a mesh. the code is included as the file blend.
+
 Modules
 =============================================================================
 There are a total of eight modules, pc_serial_com, render, scan, sensor, stepper, system, tft, and ui. 
