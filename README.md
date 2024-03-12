@@ -54,6 +54,7 @@ ui: (Written from scratch)
 - function runMenu takes an array of pointers to character arrays, the lengths of these character arrays, and an integer length. the arrays are displayed as text menu options, and the user can use the dial to select one of the options. an integer corresponding to the selected option is returned.
 
 Structure
+=
 The full structure of this device includes the following hardware peripherals and their connections to the Nucleo-F429ZI:
 1. TFT_ST7789V (TFT driver chip on Adafruit 240x320 TFT display)
    - 3.3V, GND, PF12, PA5, PD15, PD14, PA7, PA6 (SPI interface with additional data/command signal and reset pin)
