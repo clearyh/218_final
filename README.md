@@ -67,8 +67,9 @@ TESTS
 |Test:|Subsystem:|Results:|
 |:----|:----|:----|
 |Full Motion Test - theta axis|Stepper Motors|Completed an exact 360° rotation consistently in 3 trials|
-|Full motion test - Z axis|Stepper motors|Z axis has a full range of 12 cm, which is consistent across 3 trials. Carriage is able to reset to its exact starting position after each scan|
-|Spatial resolution test - ADC|NUCLEO ADC|The smallest variation in distance distinguishable by the ADC for a surface approximately 6cm from the sensor is 0.03 mm|
-|Spatial resolution test - Sensor signal noise|Distance sensor|A range of 2.2 cm was found in error measurements|
-|Spatial resolution test - Sensor FOV|Distance sensor|Through testing various FOVs, a 0.125 radius FOV was found to work best at providing measurements with the least accuracy tradeoff|
+|Full Motion Test - Z axis|Stepper motors|Z axis has a full range of 12 cm, which is consistent across 3 trials. Carriage is able to reset to its exact starting position after each scan|
+|Spatial Resolution Test - ADC|NUCLEO ADC|The smallest variation in distance distinguishable by the ADC for a surface approximately 6cm from the sensor is 0.03 mm|
+|Spatial Resolution Test - Sensor signal noise|Distance sensor|A range of 2.2 cm was found in error measurements|
+|Spatial Resolution Test - Sensor FOV|Distance sensor|Through testing various FOVs, a 0.125 radius FOV was found to work best at providing measurements with the least accuracy tradeoff|
+|Speed Test|System|Testing on the lowest resolution of 45 x 30, the scan took 15 minutes and 55 seconds, which was slightly longer but close to the expected 14 minutes. |
 
