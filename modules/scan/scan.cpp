@@ -33,12 +33,12 @@ uint16_t distanceArray[Z_RESOLUTION_MAX][THETA_RESOLUTION_MAX]; //array containi
 int theta_inc = TOTAL_STEP_THETA / THETA_RESOLUTION_MAX; //steps per increment theta
 int z_inc = TOTAL_STEP_Z / Z_RESOLUTION_MAX; // steps per increment Z
 
-int t_res = 10; // actual resolution
-int z_res = 1;
+int t_res = 15; // actual resolution
+int z_res = 15;
 
 //data for resolution menu
-char *resolution_menu_text[4] = {"45 x 30", "95 x 60", "171 x 90", "285 x 180"};
-int resolution_menu_lengths[4] = {7, 7, 8, 9};
+char *resolution_menu_text[5] = {"15 x 15", "45 x 27", "95 x 57", "171 x 90", "285 x 171"};
+int resolution_menu_lengths[5] = {7, 7, 7, 8, 9};
 
 
 //=====[Declarations (prototypes) of private functions]========================
@@ -51,7 +51,6 @@ static void updateIncrement();
 //scan function
 void scan() {
     updateIncrement();
-    tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 100, TXT_HEAD, "scan in progress", 16); // preparing tft readout
     tftDrawString(30, 140, TXT_NSEL, "! step:", 7);
     tftDrawString(30, 180, TXT_NSEL, "Z step:", 7);
@@ -66,8 +65,9 @@ void scan() {
             distanceArray[z_step][theta_step] = readSensor(); // store read sensor value in the array
     
             char float_string[6];
-            sprintf(float_string, "%.3f", getDistance(z_step, theta_step));
-            uartWriteString(float_string, 7);
+            sprintf(float_string, "%.3f", getDistance(theta_step, z_step));
+            uartWriteString(float_string, 6);
+            uartWriteString("\n", 1);
 
             stepTheta(theta_inc);
         }
@@ -76,40 +76,42 @@ void scan() {
     tftShadeRect(30, 100, 210, 220, 0x0000);
     tftDrawCenteredString(120, 100, TXT_HEAD, "scan complete", 13); // tft readout
     stepZ(-TOTAL_STEP_Z); // return z axis carriage to home
+    tftShadeRect(0, 100, 240, 220, 0x0000);
     mainMenu();
 }
 
 //function to allow the user to select scanning resolution
 void resolution() {
-    tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 20, TXT_HEAD, "set resolution", 14);
-    switch(runMenu(resolution_menu_text, resolution_menu_lengths, 4)) {
+    switch(runMenu(resolution_menu_text, resolution_menu_lengths, 5)) {
         case 0:
-            t_res = 45;
-            z_res = 30;
-            break;
+            t_res = 15;
+            z_res = 15;
         case 1:
-            t_res = 95;
-            z_res = 60;
+            t_res = 45;
+            z_res = 27;
             break;
         case 2:
-            t_res = 171;
-            z_res = 90;
+            t_res = 95;
+            z_res = 57;
             break;
         case 3:
+            t_res = 171;
+            z_res = 95;
+            break;
+        case 4:
         default:
             t_res = 285;
-            z_res = 180;
+            z_res = 171;
             break;
     }
-    updateIncrement();
+    tftShadeRect(0, 20, 240, 220, 0x0000);
     mainMenu();
 }
 
 
 //function to allow the user to move both axes and set a home point
 void calibration() {
-    tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 100, TXT_HEAD, "calibrate Z axis", 16);
     while (!readEnter()) {
         switch (readDial(3)) {
@@ -142,6 +144,7 @@ void calibration() {
                 break;
         }
     }
+    tftShadeRect(0, 100, 240, 140, 0x0000);
     mainMenu();
 }
 
@@ -155,7 +158,7 @@ int getZres() {
     return z_res;
 }
 
-// fetches raw sensor AnalogIn data from the array
+// fetches raw sensor AnalogIn data from the array for the render function
 uint16_t getSensorReading(int t, int z) {
     return distanceArray[z][t];
 }

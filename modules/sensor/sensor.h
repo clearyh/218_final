@@ -11,8 +11,7 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
-void sensorInit();
-float readSensor();
+uint16_t readSensor();
 
 //=====[#include guards - end]=================================================
  

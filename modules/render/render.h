@@ -9,6 +9,7 @@
 
 //=====[Declaration of public data types]======================================
 
+//vector class for convenient math with 3D cartesian coordinates
 class Vector {
     public:
     float x, y, z;
@@ -26,7 +27,6 @@ class Vector {
 //=====[Declarations (prototypes) of public functions]=========================
 
 void render();
-void projection();
 void transmit();
 float getDistance(int t_s, int z_s);
 

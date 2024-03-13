@@ -23,9 +23,6 @@ AnalogIn sensor(A5);
 
 //=====[Implementations of public functions]===================================
 
-void sensorInit() {
-
-}
 
 uint16_t readSensor() {
     return sensor.read_u16();

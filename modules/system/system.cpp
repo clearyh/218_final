@@ -26,17 +26,18 @@ int main_menu_lengths[5] = {10, 11, 4, 6, 8};
 
 //=====[Implementations of public functions]===================================
 
+//initialize tft and ui
 void systemInit() {
-    //initialize tft and ui
     tftInit();
     uiInit();
 }
 
+// main menu function - user uses UI to select resolution, calibration, scan, render, or transmit
 void mainMenu() {
-    // main menu function
-    tftShadeRect(0, 0, 240, 320, 0x0000);
+
     tftDrawCenteredString(120, 20, TXT_HEAD, "main menu", 9);
     switch(runMenu(main_menu_text, main_menu_lengths, 5)) {
+        tftShadeRect(0, 0, 240, 260, 0x0000);
         case 0:
             resolution();
             break;

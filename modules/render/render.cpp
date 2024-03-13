@@ -17,8 +17,8 @@
 #define I1 .024
 #define I2 0.155
 #define M (I2 - I1)/(V2 - V1)
-#define R_SENSOR 15.24 // The distance on xy plane of the sensor from the center of rotation
-#define SENSOR_DZ 10 // variable for the downward tilt of the sensor
+#define R_SENSOR 15.25 // The distance on xy plane of the sensor from the center of rotation
+#define SENSOR_DZ 3 // variable for the downward tilt of the sensor
 #define CAMERA_FOV_X 68 // camera fov on 2 axes in degrees - note 68/90 ~= 240/320, the display aspect ratio
 #define CAMERA_FOV_Z 90
 
@@ -56,7 +56,6 @@ static uint16_t getColor(float dist);
 
 //function to render data to the screen
 void render() {
-    tftShadeRect(0, 0, 240, 320, 0x0000);
     int z_res = getZres();
     int t_res = getTres();
     for(int z_step = 0; z_step < z_res; z_step++) { // iterate through Z
@@ -86,46 +85,47 @@ void render() {
             }
         }
     }
+    while (!readEnter()) {
+
+    }
+    tftShadeRect(0, 0, 240, 320, 0x0000);
+    mainMenu();
 }
 
 
 //transmit an array of the 3D surface point coordinates in human readable ASCII over uartUSB
 void transmit() { 
-    tftShadeRect(0, 0, 240, 320, 0x0000);
     tftDrawCenteredString(120, 100, TXT_HEAD, "transmitting", 12);
     int z_res = getZres();
     int t_res = getTres();
-    char *openbracket = "[";
-    char *closebracket = "]";
+    char *openparen = "(";
+    char *closeparen = ")";
     char *comma = ",";
-    uartWriteString(openbracket, 1);
+    uartWriteString("[", 1);
     for(int z_step = 0; z_step < z_res; z_step++) { // iterate through Z
-        uartWriteString(openbracket, 1);
         for(int theta_step = 0; theta_step < t_res; theta_step++) { // iterate through theta
-            uartWriteString(openbracket, 1);
+            uartWriteString(comma, 1);
+            uartWriteString(openparen, 1);
             Vector surface_point = getSurfacePoint(theta_step, z_step);
-            char float_string[6];
-            sprintf(float_string, "%.3f", surface_point.x);
+            char float_string[5];
+            sprintf(float_string, "%.2f", surface_point.x); // transmit ,(x, y, z)
             uartWriteString(float_string, 7);
             uartWriteString(comma, 1);
-            sprintf(float_string, "%.3f", surface_point.y);
+            sprintf(float_string, "%.2f", surface_point.y);
             uartWriteString(float_string, 7);
             uartWriteString(comma, 1);
-            sprintf(float_string, "%.3f", surface_point.z);
+            sprintf(float_string, "%.2f", surface_point.z);
             uartWriteString(float_string, 7);
-            uartWriteString(closebracket, 1);
-            uartWriteString(comma, 1);
+            uartWriteString(closeparen, 1);
         }
-        uartWriteString(closebracket, 1);
-        uartWriteString(comma, 1);
-
     }
-    uartWriteString(closebracket, 1);
+    uartWriteString("]", 1);
     tftDrawCenteredString(120, 100, TXT_HEAD, "transmission", 12);
     tftDrawCenteredString(120, 140, TXT_HEAD, "complete", 8);
     while (!readEnter()) {
 
     }
+    tftShadeRect(0, 100, 240, 180, 0x0000);
     mainMenu();
 }
 
@@ -150,20 +150,22 @@ static Vector getSurfacePoint(int t_s, int z_s) {
 }
 
 static Vector getSensorPosition(int t_s, int z_s) {
+    //uses trig to create 3D vector for sensor position for a certain theta and z 
     float theta = 3.1415926 * 2 * t_s / getTres();
-    float v_z = 20.0 * z_s / getZres();
+    float v_z = 12.0 * z_s / getZres();
     float v_x = R_SENSOR * cos(theta);
     float v_y = R_SENSOR * sin(theta);
     return Vector(v_x, v_y, v_z);
 }
 
 static Vector getSensorDirection(int t_s, int z_s) {
-    float theta = 360.0 * t_s / getTres();
-    float v_x = -R_SENSOR * cos(theta);
-    float v_y = -R_SENSOR * sin(theta);
-    Vector ret(v_x, v_y, -SENSOR_DZ);
-    ret.normalize();
-    return ret;
+    // because the sensor is always pointing towards the center, the direction is -1*position on the xy plane.
+    // macro SENSOR_DZ is used to represent the downward angle of the sensor. it must be calibrated experimentally.
+    Vector v = getSensorPosition(t_s, z_s);
+    v.scale(-1);
+    v.z = -SENSOR_DZ;
+    v.normalize();
+    return v;
 }
 
 static uint16_t getColor(float dist) {

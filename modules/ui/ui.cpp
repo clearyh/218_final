@@ -12,7 +12,6 @@
 
 AnalogIn dial(A0);
 DigitalIn enter(D4);
-DigitalIn back(D5);
 
 //=====[Declaration of external public global variables]=======================
 
@@ -27,9 +26,11 @@ DigitalIn back(D5);
 
 void uiInit() {
     enter.mode(PullDown);
-    back.mode(PullDown);
 }
 
+
+// divides the potentiometer into div sections and returns an integer for which section the wiper is in
+// e.g. for div = 5, potentiometer full ccw returns 0 and full cw returns 4
 int readDial(int div) {
     int ret = (int) (dial.read()*div);
     if (ret >= 0 && ret < div) return ret;
@@ -40,10 +41,8 @@ bool readEnter() {
     return enter.read();
 }
 
-bool readBack() {
-    return back.read();
-}
 
+// function to run a text menu with multiple options and return an int that indicates which option is selected
 int runMenu(char **entries, int *entry_lengths, int length) {
     int current_select = 0;
     int next_select = readDial(length);
@@ -59,7 +58,9 @@ int runMenu(char **entries, int *entry_lengths, int length) {
             current_select = next_select;
         }
     }
+    tftShadeRect(0, 0, 240, 320, 0x0000);
     return current_select;
+    
 }
 
 

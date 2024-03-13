@@ -92,8 +92,14 @@ void tftSetRect(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye) {
 
 void tftShadePixel(uint16_t x, uint16_t y, uint16_t c) {
     //changes the color of a single pixel at coordinate x, y
-    tftSetRect(x, x + 1, y, y + 1);
+    tftSetRect(x, x + 2, y, y + 2);
     tftCommand(RAM_WR);
+    tftData((c >> 8) & 0xFF);
+    tftData(c & 0xFF);
+    tftData((c >> 8) & 0xFF);
+    tftData(c & 0xFF);
+    tftData((c >> 8) & 0xFF);
+    tftData(c & 0xFF);
     tftData((c >> 8) & 0xFF);
     tftData(c & 0xFF);
 }
